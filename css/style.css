@@ -41,6 +41,10 @@ footer{
     width: 50%;
 }
 
+.content-card{
+    width: 18rem;
+}
+
 .socialMedia:hover {
     background-color: #AF7A6D;
     border-radius: 40px;

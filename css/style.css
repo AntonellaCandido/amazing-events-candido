@@ -45,6 +45,13 @@ footer{
     width: 18rem;
 }
 
+
+.filter{
+    display: none;
+}
+
+input[type="checkbox"]:checked
+
 .socialMedia:hover {
     background-color: #AF7A6D;
     border-radius: 40px;

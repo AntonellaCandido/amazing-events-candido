@@ -1,18 +1,25 @@
 
-const eventos = data.events;
 
-const queryString = location.search
-const params = new URLSearchParams(queryString)
-const id = params.get("id")
 
-const eventsCard = eventos.find(item => item._id == id)
+fetch("https://amazing-events.onrender.com/api/events")
+    .then((res) => res.json())
+    .then(data =>{
 
-const container = document.getElementById("containerDetails")
+        let datos = data.events
 
-container.innerHTML = `
+        const queryString = location.search
+        const params = new URLSearchParams(queryString)
+        const id = params.get("id")
+
+        
+        const eventsCard = datos.find(item => item._id == id)
+    
+        const container = document.getElementById("containerDetails")
+
+        container.innerHTML = `
 
         <div class="card cardImg d-flex flex-row m-1">
-            <img src=" ${eventsCard.image} " class="card-img-top w-100 img-fluid" alt="imgCine">
+            <img src="${eventsCard.image}"class="card-img-top w-100 img-fluid" alt="${eventsCard.name}">
         </div>
         <div class="card-body text-center">
             <h5 class="card-title text-light"> ${eventsCard.name} </h5>
@@ -25,5 +32,8 @@ container.innerHTML = `
         </div>
 
 `
+
+    })
+
 
 

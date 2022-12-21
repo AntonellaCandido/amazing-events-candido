@@ -1,8 +1,21 @@
 
 
+
     const containerDivPastEvent =document.getElementById("contentPastEvents"); 
     let fragment = document.createDocumentFragment()
-    const valoresDataPast = data.events
+    let valoresDataPast;
+
+    fetch("https://amazing-events.onrender.com/api/events")
+        .then((res) => res.json())
+        .then((datos) =>{
+            valoresDataPast = datos.events
+            const arrayCheck = Array.from( new Set(valoresDataPast.map( elementPast => elementPast.category)))
+            renderPast(valoresDataPast,containerDivPastEvent)
+            renderPastCheck(arrayCheck, checkPastEvents )
+        })
+        .catch((err) => console.log(err))
+
+
 
     function renderPast(array,contenedor){
 
@@ -31,7 +44,8 @@
         contenedor.appendChild(fragment)
     }
 
-    renderPast(valoresDataPast,containerDivPastEvent)
+
+
 
 
 
@@ -39,7 +53,7 @@
     const checkPastEvents = document.getElementById("checkEventP");
     const fragmentPastEvent = document.createDocumentFragment(); 
 
-    const arrayCheck = Array.from( new Set(valoresDataPast.map( elementPast => elementPast.category)))
+
 
 
     function renderPastCheck(category,container){
@@ -57,7 +71,7 @@
         container.appendChild(fragmentPastEvent);
     }
 
-    renderPastCheck(arrayCheck, checkPastEvents )
+
 
 
     checkPastEvents.addEventListener("change", (e) =>{
@@ -90,6 +104,25 @@
     function filterSearchPast(eventos,input){
         return eventos.filter(event => event.name.toLowerCase().includes( input.value.toLowerCase() ))
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

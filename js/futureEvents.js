@@ -2,8 +2,19 @@
 
     const containerDiv =document.getElementById("containerFuture"); 
     let fragment = document.createDocumentFragment()
-    const valoresFuture = data.events
+    let valoresFuture;
 
+    fetch("https://amazing-events.onrender.com/api/events")
+        .then((res) => res.json())
+        .then((datos) =>{
+            valoresFuture = datos.events
+            const arrayFuture = Array.from( new Set( valoresFuture.map( elementUpcoming => elementUpcoming.category) ))
+            renderFuture(valoresFuture,containerDiv)
+            renderFutureCheck(arrayFuture,containerUpcoming)
+        })
+        .catch((err)=>console.log(err))
+
+    
     function renderFuture(lista,contenedor){
 
     contenedor.innerHTML = "";
@@ -15,7 +26,7 @@
                 anioEventosFuturos.classList.add("card", "text-light", "m-1", "content-card")
         
                 anioEventosFuturos.innerHTML = `
-                    <img src='${e.image}' class='card-img-top' alt' ${e.name} '>
+                    <img src='${e.image}' class='card-img-top' alt'${e.name}'>
                     <div class='card-body text-center'>
                     <h5 class='card-title'>${e.name}</h5>
                     <p class='card-text'>  ${e.description}  </p>
@@ -30,14 +41,14 @@
         }) 
         contenedor.appendChild( fragment)
     }
-    renderFuture(valoresFuture,containerDiv)
+
 
 
 
 
     const containerUpcoming = document.getElementById("containerUpcoming"); 
     const fragmentUpcoming = document.createDocumentFragment();
-    const arrayFuture = Array.from( new Set( valoresFuture.map( elementUpcoming => elementUpcoming.category) ))
+    
 
     function renderFutureCheck(category,container){
 
@@ -54,7 +65,7 @@
     
         container.appendChild(fragmentUpcoming)
     }
-    renderFutureCheck(arrayFuture,containerUpcoming)
+
 
 
     containerUpcoming.addEventListener("change", (e) =>{
@@ -63,25 +74,68 @@
         const checkListFuture = Array.from(checkedFuture)
         const arrayCheck = checkListFuture.map(elemento => elemento.value)
         
-        let filterFuture = filterFutureCategory(valoresFuture,arrayCheck)
-        renderFuture(filterFuture,containerDiv)
+        
+        let filterCategory = filterFutureCategory(valoresFuture,arrayCheck)
+        
+        renderFuture(filterCategory,containerDiv)
+
+
     })
 
+
+
     inputFuture.addEventListener("input", (e)=>{
+        
         let filterFuture = filterSearch(valoresFuture,inputFuture)
+    
         renderFuture(filterFuture,containerDiv)
+
     })
+
 
     function filterFutureCategory(eventos,categorias){
         if (categorias.length === 0){
             return eventos
         }
+        
         return eventos.filter(evento => categorias.includes(evento.category))
+        
     }
 
     function filterSearch(eventos,input){
         return eventos.filter(event => event.name.toLowerCase().includes( input.value.toLowerCase() ))
     }
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

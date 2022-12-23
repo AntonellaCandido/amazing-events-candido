@@ -1,11 +1,12 @@
     
-    const contenedor = document.getElementById("containerHome") 
+    const contenedorCard = document.getElementById("containerHome") 
     let fragment = document.createDocumentFragment()
 
     const checkContainer = document.getElementById("container-check") 
     const fragmentCheck = document.createDocumentFragment()
 
     const inputSearch = document.getElementById("searchInput")
+
 
     let valoresDataHome;
 
@@ -17,7 +18,7 @@
             valoresDataHome = datos.events
             const arrayCheckNew = Array.from( new Set(valoresDataHome.map( elemento => elemento.category)))
             
-            renderCard(valoresDataHome,contenedor)
+            renderCard(valoresDataHome,contenedorCard)
             renderCheckBox(arrayCheckNew,checkContainer)
         })
         .catch(err => console.log(console.log(err)))
@@ -25,8 +26,8 @@
 
 
 
-        function renderCard(array,containerCard){
-            containerCard.innerHTML = "";
+        function renderCard(array,contenedor){
+            contenedor.innerHTML = "";
 
             array.forEach((evento)=>{
                 
@@ -46,11 +47,8 @@
                     `
                 fragment.appendChild( divEvents)
         })
-        containerCard.appendChild(fragment)
+        contenedor.appendChild(fragment)
         }
-
-
-
 
 
         function renderCheckBox(categoryCard,container){
@@ -70,48 +68,45 @@
         }
         
 
-
+        let arrayCheckBox = []
         checkContainer.addEventListener("change", (e) =>{  
             
             const checked = document.querySelectorAll('input[type="checkbox"]:checked')
             const arrayChecked = Array.from(checked)
-            const arrayCheckBox = arrayChecked.map(elemento => elemento.value)
+            arrayCheckBox = arrayChecked.map(elemento => elemento.value)
 
-            let cardFilterByCategory = filterByCategory(valoresDataHome,arrayCheckBox)
-
-            renderCard(cardFilterByCategory, contenedor)
+            let filtros =  filter(arrayCheckBox, inputSearch.value, valoresDataHome)
+            renderCard(filtros, contenedorCard)
         })
 
         
         inputSearch.addEventListener("input", (e) =>{
-        let filterBySearch = filtroDeBusqueda(valoresDataHome,inputSearch)
-        
-        renderCard(filterBySearch, contenedor)
-            
+
+        let filtros =  filter(arrayCheckBox, inputSearch.value, valoresDataHome)
+        renderCard(filtros, contenedorCard)    
         })
 
-
-        function filterByCategory(eventos,categorias){
-
-            if (categorias.length === 0){
+        function filtroPorCategoria(eventos, categorias){
+            if(!categorias.length){
                 return eventos
             }
-    
-            return eventos.filter(evento => categorias.includes(evento.category))
-    }
+            return categorias.map(elemento => eventos.filter(evento => evento.category.includes(elemento))).flat()
+        }
+
 
         function filtroDeBusqueda(eventos,input){
-            return eventos.filter(event => event.name.toLowerCase().includes( input.value.toLowerCase() ))
+            return eventos.filter(event => event.name.toLowerCase().includes( input.toLowerCase() ))
     }
 
+    function filter(select, input, array){
+        let filtradoPorCategoria = filtroPorCategoria(array, select)
+        let filtradoPorBusqueda = filtroDeBusqueda(filtradoPorCategoria, input)
+        return filtradoPorBusqueda
+}
 
 
 
-
-
-
-
-
+    
 
 
 

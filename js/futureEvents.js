@@ -2,6 +2,11 @@
 
     const containerDiv =document.getElementById("containerFuture"); 
     let fragment = document.createDocumentFragment()
+
+    const containerUpcoming = document.getElementById("containerUpcoming"); 
+    const fragmentUpcoming = document.createDocumentFragment();
+
+    const inputF = document.getElementById("inputFuture")
     let valoresFuture;
 
     fetch("https://amazing-events.onrender.com/api/events")
@@ -43,13 +48,6 @@
     }
 
 
-
-
-
-    const containerUpcoming = document.getElementById("containerUpcoming"); 
-    const fragmentUpcoming = document.createDocumentFragment();
-    
-
     function renderFutureCheck(category,container){
 
         category.forEach( (pastEvents) => {
@@ -66,57 +64,44 @@
         container.appendChild(fragmentUpcoming)
     }
 
-
+    let futureArray = []
 
     containerUpcoming.addEventListener("change", (e) =>{
         
         const checkedFuture = document.querySelectorAll('input[type="checkbox"]:checked');
         const checkListFuture = Array.from(checkedFuture)
-        const arrayCheck = checkListFuture.map(elemento => elemento.value)
+        futureArray = checkListFuture.map(elemento => elemento.value)
         
-        
-        let filterCategory = filterFutureCategory(valoresFuture,arrayCheck)
-        
-        renderFuture(filterCategory,containerDiv)
-
-
+        let filtrosF = futuroFiltros(futureArray,inputF.value,valoresFuture)
+        renderFuture(filtrosF,containerDiv)
     })
 
 
 
-    inputFuture.addEventListener("input", (e)=>{
-        
-        let filterFuture = filterSearch(valoresFuture,inputFuture)
-    
-        renderFuture(filterFuture,containerDiv)
+    inputF.addEventListener("input", (e)=>{
 
+        let filtrosF = futuroFiltros(futureArray,inputF.value,valoresFuture)
+        renderFuture(filtrosF,containerDiv)
     })
 
 
-    function filterFutureCategory(eventos,categorias){
-        if (categorias.length === 0){
+    function filtroPorCategoriaFuture(eventos,categorias){
+        if(!categorias.length){
             return eventos
         }
-        
-        return eventos.filter(evento => categorias.includes(evento.category))
-        
+        return categorias.map(elemento => eventos.filter(evento => evento.category.includes(elemento))).flat()
     }
 
-    function filterSearch(eventos,input){
-        return eventos.filter(event => event.name.toLowerCase().includes( input.value.toLowerCase() ))
+    function filtroPorBusquedaFuturo(eventos,input){
+        return eventos.filter(event => event.name.toLowerCase().includes( input.toLowerCase() ))
     }
 
-
+    function futuroFiltros(select, input, array){
+        let categoriaFiltrado = filtroPorCategoriaFuture(array,select)
+        let busquedaFiltrado = filtroPorBusquedaFuturo(categoriaFiltrado,input)
+        return busquedaFiltrado
+    }
     
-
-
-
-
-
-
-
-
-
 
 
 

@@ -73,36 +73,41 @@
 
 
 
-
+    let checkLista = []
     checkPastEvents.addEventListener("change", (e) =>{
         
         const checkedPast = document.querySelectorAll('input[type="checkbox"]:checked');
         const checkListPast = Array.from(checkedPast)
-        const arrayCheck = checkListPast.map(elemento => elemento.value)
+        checkLista = checkListPast.map(elemento => elemento.value)
 
-        let cardFilterPast = filterCategoryPast(valoresDataPast,arrayCheck)
-        renderPast(cardFilterPast,containerDivPastEvent)
-
+        let filtrosPasados = filterPasados(checkLista,pastInput.value,valoresDataPast)
+        renderPast(filtrosPasados,containerDivPastEvent)
     })
 
 
     const pastInput = document.getElementById("inputPast")
 
     pastInput.addEventListener("input", (e)=>{
-        let filterPast = filterSearchPast(valoresDataPast,pastInput)
-        renderPast(filterPast,containerDivPastEvent)
+        let filtrosPasados = filterPasados(checkLista,pastInput.value,valoresDataPast)
+        renderPast(filtrosPasados,containerDivPastEvent)
     })
 
-    function filterCategoryPast(events,category){
-        
-        if (category.length === 0){
+    function filtroPorCategoriaPast(events,category){
+        if(!category.length){
             return events
         }
-        return events.filter(evento => category.includes(evento.category))
+        return category.map(elemento => events.filter(evento => evento.category.includes(elemento))).flat()
     }
 
-    function filterSearchPast(eventos,input){
-        return eventos.filter(event => event.name.toLowerCase().includes( input.value.toLowerCase() ))
+    function filtroPorBusquedaPast(eventos,input){
+        return eventos.filter(event => event.name.toLowerCase().includes( input.toLowerCase() ))
+    }
+
+
+    function filterPasados(select,input,array){
+        let filtradoCategoriaPast = filtroPorCategoriaPast(array,select)
+        let filtradoBPast = filtroPorBusquedaPast(filtradoCategoriaPast,input)
+        return filtradoBPast
     }
 
 
@@ -112,6 +117,14 @@
 
 
 
+//let cardFilterPast = filtroPorCategoriaPast(valoresDataPast,arrayCheck)
+        //renderPast(cardFilterPast,containerDivPastEvent)
+
+
+
+
+ //let filterPast = filtroPorBusquedaPast(valoresDataPast,pastInput)
+        //renderPast(filterPast,containerDivPastEvent)
 
 
 
@@ -119,16 +132,10 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
+  // if (category.length === 0){
+        //     return events
+        // }
+        // return events.filter(evento => category.includes(evento.category))
 
 
 

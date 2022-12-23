@@ -31,31 +31,37 @@ fetch("https://amazing-events.onrender.com/api/events")
     })
 
 
+    function mayorAsistencia(eventos, contenedor){
 
-    function mayorAsistencia(eventos,contenedor){
+        let filtrarAsistencia = eventos.filter(event => event.hasOwnProperty("assistance"))
 
-        let filtrarAsistencia = eventos.filter(even => even.hasOwnProperty("assistance") )
+        const asistenciaPorcentaje = filtrarAsistencia.map(event => event.assistance / event.capacity * 100)
 
+        const mayorAsistencia = asistenciaPorcentaje.indexOf(Math.max(...asistenciaPorcentaje))
 
-        const highestAssistance = filtrarAsistencia.reduce((highest, current) => {
-            return current.assistance > highest.assistance ? current : highest;}, { assistance: 0 });
-
-        let porcentaje = parseInt(highestAssistance.assistance / highestAssistance.capacity * 100)
-
-
-        contenedor.innerHTML = `<td scope="row" id="FilaMayor"> ${highestAssistance.name}  ${porcentaje} %</td>`
+        contenedor.innerHTML += `
+            <td scope="row" id="FilaMayor"> ${eventos[mayorAsistencia].name}
+            ${Math.max(...asistenciaPorcentaje).toFixed(2)} %<td/>
+        `
     }
 
 
+
+
     function menorAsistencia(eventos,contenedor){
+        let filtrarAsistencia = eventos.filter(even => even.hasOwnProperty("assistance"))
 
-        let filtrarAsistencia = eventos.filter(even => even.hasOwnProperty("assistance") )
+        const asistenciaPorcentaje = filtrarAsistencia.map(event => event.assistance / event.capacity * 100)
 
-        const minAssitance = filtrarAsistencia.reduce((min, event) => {
-            return event.assistance < min.assistance ? event : min;}, filtrarAsistencia[0] );
-        let porcentaje = parseInt(minAssitance.assistance / minAssitance.capacity * 100)
+        const menorAsistenciaEvento = asistenciaPorcentaje.indexOf(Math.min(...asistenciaPorcentaje))
 
-        contenedor.innerHTML = `<td scope="row" id="FilaMayor"> ${minAssitance.name}  ${porcentaje} %</td>`
+        contenedor.innerHTML += `
+            <td scope="row" id="FilaMayor"> ${eventos[menorAsistenciaEvento].name}
+            ${Math.min(...asistenciaPorcentaje).toFixed(2)} %<td/>
+        `
+
+
+
     }
 
 
@@ -66,9 +72,6 @@ fetch("https://amazing-events.onrender.com/api/events")
 
         contenedor.innerHTML = `<td scope="row" id="FilaMayor"> ${highestCapacity.name} capacity: ${highestCapacity.capacity} </td>`
     }
-
-
-
 
 
 
@@ -113,3 +116,6 @@ fetch("https://amazing-events.onrender.com/api/events")
         });
         contenedor.innerHTML = listaEvento
     }
+
+
+

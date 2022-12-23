@@ -9,8 +9,6 @@ let contenedorCapacity = document.getElementById("contenedorTres")
 
 let contenedorcategoria = document.getElementById("eventosFuturosFilas")
 
-
-
 let contenedorEventoPasado = document.getElementById("contenedorPasado")
 
 
@@ -34,11 +32,12 @@ fetch("https://amazing-events.onrender.com/api/events")
     function mayorAsistencia(eventos, contenedor){
 
         let filtrarAsistencia = eventos.filter(event => event.hasOwnProperty("assistance"))
+        
 
         const asistenciaPorcentaje = filtrarAsistencia.map(event => event.assistance / event.capacity * 100)
-
+        
         const mayorAsistencia = asistenciaPorcentaje.indexOf(Math.max(...asistenciaPorcentaje))
-
+        
         contenedor.innerHTML += `
             <td scope="row" id="FilaMayor"> ${eventos[mayorAsistencia].name}
             ${Math.max(...asistenciaPorcentaje).toFixed(2)} %<td/>
